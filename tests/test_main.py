@@ -19,9 +19,48 @@ def test_category_initialization():
     category = Category("Test Category", "Test Description", [product1, product2])
     assert category.name == "Test Category"
     assert category.description == "Test Description"
-    assert len(category.products) == 2
+    assert len(category._Category__products) == 2
     assert Category.category_count == 1
     assert Category.product_count == 2
+
+def test_add_product():
+    category = Category("Test Category", "Test Description")
+    product = Product("Test Product", "Test Description", 100.0, 10)
+    category.add_product(product)
+    assert len(category._Category__products) == 1
+    assert Category.product_count == 1
+
+def test_products_getter():
+    product1 = Product("Product 1", "Description 1", 100.0, 5)
+    product2 = Product("Product 2", "Description 2", 200.0, 3)
+    category = Category("Test Category", "Test Description", [product1, product2])
+    expected_output = (
+        "Product 1, 100.0 руб. Остаток: 5 шт.\n"
+        "Product 2, 200.0 руб. Остаток: 3 шт."
+    )
+    assert category.products == expected_output
+
+def test_new_product():
+    product_data = {
+        "name": "Test Product",
+        "description": "Test Description",
+        "price": 100.0,
+        "quantity": 10
+    }
+    product = Product.new_product(product_data)
+    assert product.name == "Test Product"
+    assert product.description == "Test Description"
+    assert product.price == 100.0
+    assert product.quantity == 10
+
+def test_price_setter():
+    product = Product("Test Product", "Test Description", 100.0, 10)
+    product.price = 200.0
+    assert product.price == 200.0
+    product.price = -50.0
+    assert product.price == 200.0  # Price should not change
+    product.price = 0
+    assert product.price == 200.0  # Price should not change
 
 def test_multiple_categories():
     product1 = Product("Product 1", "Description 1", 100.0, 5)
