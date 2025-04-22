@@ -30,6 +30,11 @@ def test_add_product():
     assert len(category._Category__products) == 1
     assert Category.product_count == 1
 
+def test_add_product_type_check():
+    category = Category("Test Category", "Test Description")
+    with pytest.raises(TypeError):
+        category.add_product("Not a Product")
+
 def test_products_getter():
     product1 = Product("Product 1", "Description 1", 100.0, 5)
     product2 = Product("Product 2", "Description 2", 200.0, 3)
