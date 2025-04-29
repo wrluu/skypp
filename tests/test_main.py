@@ -63,9 +63,9 @@ def test_price_setter():
     product.price = 200.0
     assert product.price == 200.0
     product.price = -50.0
-    assert product.price == 200.0  # Price should not change
+    assert product.price == 200.0
     product.price = 0
-    assert product.price == 200.0  # Price should not change
+    assert product.price == 200.0
 
 def test_multiple_categories():
     product1 = Product("Product 1", "Description 1", 100.0, 5)
@@ -75,3 +75,23 @@ def test_multiple_categories():
     category2 = Category("Category 2", "Description 2", [product3])
     assert Category.category_count == 2
     assert Category.product_count == 3
+
+def test_product_str():
+    product = Product("Test Product", "Test Description", 100.0, 10)
+    assert str(product) == "Test Product, 100.0 руб. Остаток: 10 шт."
+
+def test_category_str():
+    product1 = Product("Product 1", "Description 1", 100.0, 5)
+    product2 = Product("Product 2", "Description 2", 200.0, 3)
+    category = Category("Test Category", "Test Description", [product1, product2])
+    assert str(category) == "Test Category, количество продуктов: 8 шт."
+
+def test_product_add():
+    product1 = Product("Product 1", "Description 1", 100.0, 5)
+    product2 = Product("Product 2", "Description 2", 200.0, 3)
+    assert product1 + product2 == 1700.0
+
+def test_product_add_type_check():
+    product1 = Product("Product 1", "Description 1", 100.0, 5)
+    with pytest.raises(TypeError):
+        product1 + "Not a Product"
