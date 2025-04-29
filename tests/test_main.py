@@ -1,5 +1,5 @@
 import pytest
-from src.main import Product, Category
+from src.main import Product, Category, Smartphone, LawnGrass
 
 @pytest.fixture(autouse=True)
 def reset_counters():
@@ -12,6 +12,44 @@ def test_product_initialization():
     assert product.description == "Test Description"
     assert product.price == 100.0
     assert product.quantity == 10
+
+def test_smartphone_initialization():
+    smartphone = Smartphone(
+        "Samsung Galaxy S23 Ultra",
+        "256GB, Серый цвет, 200MP камера",
+        180000.0,
+        5,
+        95.5,
+        "S23 Ultra",
+        256,
+        "Серый"
+    )
+    assert smartphone.name == "Samsung Galaxy S23 Ultra"
+    assert smartphone.description == "256GB, Серый цвет, 200MP камера"
+    assert smartphone.price == 180000.0
+    assert smartphone.quantity == 5
+    assert smartphone.efficiency == 95.5
+    assert smartphone.model == "S23 Ultra"
+    assert smartphone.memory == 256
+    assert smartphone.color == "Серый"
+
+def test_lawn_grass_initialization():
+    lawn_grass = LawnGrass(
+        "Газонная трава",
+        "Элитная трава для газона",
+        500.0,
+        20,
+        "Россия",
+        "7 дней",
+        "Зеленый"
+    )
+    assert lawn_grass.name == "Газонная трава"
+    assert lawn_grass.description == "Элитная трава для газона"
+    assert lawn_grass.price == 500.0
+    assert lawn_grass.quantity == 20
+    assert lawn_grass.country == "Россия"
+    assert lawn_grass.germination_period == "7 дней"
+    assert lawn_grass.color == "Зеленый"
 
 def test_category_initialization():
     product1 = Product("Product 1", "Description 1", 100.0, 5)
@@ -63,9 +101,9 @@ def test_price_setter():
     product.price = 200.0
     assert product.price == 200.0
     product.price = -50.0
-    assert product.price == 200.0
+    assert product.price == 200.0  # Price should not change
     product.price = 0
-    assert product.price == 200.0
+    assert product.price == 200.0  # Price should not change
 
 def test_multiple_categories():
     product1 = Product("Product 1", "Description 1", 100.0, 5)
@@ -87,11 +125,47 @@ def test_category_str():
     assert str(category) == "Test Category, количество продуктов: 8 шт."
 
 def test_product_add():
-    product1 = Product("Product 1", "Description 1", 100.0, 5)
-    product2 = Product("Product 2", "Description 2", 200.0, 3)
-    assert product1 + product2 == 1700.0
+    smartphone1 = Smartphone(
+        "Samsung Galaxy S23 Ultra",
+        "256GB, Серый цвет, 200MP камера",
+        180000.0,
+        5,
+        95.5,
+        "S23 Ultra",
+        256,
+        "Серый"
+    )
+    smartphone2 = Smartphone(
+        "Iphone 15",
+        "512GB, Gray space",
+        210000.0,
+        8,
+        98.2,
+        "15",
+        512,
+        "Gray space"
+    )
+    assert smartphone1 + smartphone2 == 2790000.0
 
 def test_product_add_type_check():
-    product1 = Product("Product 1", "Description 1", 100.0, 5)
+    smartphone = Smartphone(
+        "Samsung Galaxy S23 Ultra",
+        "256GB, Серый цвет, 200MP камера",
+        180000.0,
+        5,
+        95.5,
+        "S23 Ultra",
+        256,
+        "Серый"
+    )
+    lawn_grass = LawnGrass(
+        "Газонная трава",
+        "Элитная трава для газона",
+        500.0,
+        20,
+        "Россия",
+        "7 дней",
+        "Зеленый"
+    )
     with pytest.raises(TypeError):
-        product1 + "Not a Product"
+        smartphone + lawn_grass
