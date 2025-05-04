@@ -1,4 +1,34 @@
-class Product:
+from abc import ABC, abstractmethod
+
+class BaseProduct(ABC):
+    @abstractmethod
+    def __init__(self, name: str, description: str, price: float, quantity: int):
+        pass
+
+    @property
+    @abstractmethod
+    def price(self):
+        pass
+
+    @price.setter
+    @abstractmethod
+    def price(self, value):
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+    @abstractmethod
+    def __add__(self, other):
+        pass
+
+    @classmethod
+    @abstractmethod
+    def new_product(cls, product_data: dict):
+        pass
+
+class Product(BaseProduct):
     def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
@@ -14,7 +44,7 @@ class Product:
         if value > 0:
             self.__price = value
         else:
-            print("Цена не должна быть нулевая или отрицательная")
+            print("Цена не должна быть нулевой или отрицательной")
 
     def __str__(self):
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
@@ -42,6 +72,19 @@ class Smartphone(Product):
         self.memory = memory
         self.color = color
 
+    @classmethod
+    def new_product(cls, product_data: dict):
+        return cls(
+            name=product_data["name"],
+            description=product_data["description"],
+            price=product_data["price"],
+            quantity=product_data["quantity"],
+            efficiency=product_data["efficiency"],
+            model=product_data["model"],
+            memory=product_data["memory"],
+            color=product_data["color"]
+        )
+
 class LawnGrass(Product):
     def __init__(self, name: str, description: str, price: float, quantity: int,
                  country: str, germination_period: str, color: str):
@@ -49,6 +92,26 @@ class LawnGrass(Product):
         self.country = country
         self.germination_period = germination_period
         self.color = color
+
+    @classmethod
+    def new_product(cls, product_data: dict):
+        return cls(
+            name=product_data["name"],
+            description=product_data["description"],
+            price=product_data["price"],
+            quantity=product_data["quantity"],
+            country=product_data["country"],
+            germination_period=product_data["germination_period"],
+            color=product_data["color"]
+        )
+
+class ProductMixin:
+    def __init__(self, *args, **kwargs):
+        print(f"{self.__class__.__name__}({', '.join(map(str, args))})")
+        super().__init__(*args, **kwargs)
+
+class Product(ProductMixin, BaseProduct):
+    pass
 
 class Category:
     category_count = 0
