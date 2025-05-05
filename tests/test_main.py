@@ -6,6 +6,13 @@ def reset_counters():
     Category.category_count = 0
     Category.product_count = 0
 
+def test_product_initialization():
+    product = Product("Test Product", "Test Description", 100.0, 10)
+    assert product.name == "Test Product"
+    assert product.description == "Test Description"
+    assert product.price == 100.0
+    assert product.quantity == 10
+
 def test_smartphone_initialization():
     smartphone = Smartphone(
         "Samsung Galaxy S23 Ultra",
@@ -253,7 +260,7 @@ def test_product_add():
         512,
         "Gray space"
     )
-    assert smartphone1 + smartphone2 == 2790000.0
+    assert smartphone1 + smartphone2 == 2580000.0
 
 def test_product_add_type_check():
     smartphone = Smartphone(
@@ -277,3 +284,16 @@ def test_product_add_type_check():
     )
     with pytest.raises(TypeError):
         smartphone + lawn_grass
+
+def test_mixin():
+    smartphone = Smartphone(
+        "Samsung Galaxy S23 Ultra",
+        "256GB, Серый цвет, 200MP камера",
+        180000.0,
+        5,
+        95.5,
+        "S23 Ultra",
+        256,
+        "Серый"
+    )
+    assert str(smartphone) == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."

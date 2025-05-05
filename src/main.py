@@ -28,12 +28,18 @@ class BaseProduct(ABC):
     def new_product(cls, product_data: dict):
         pass
 
-class Product(BaseProduct):
+class ProductMixin:
+    def __init__(self, *args, **kwargs):
+        print(f"{self.__class__.__name__}({', '.join(map(str, args))})")
+        super().__init__(*args, **kwargs)
+
+class Product(ProductMixin, BaseProduct):
     def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
         self.__price = price
         self.quantity = quantity
+        super().__init__(name, description, price, quantity)
 
     @property
     def price(self):
@@ -104,14 +110,6 @@ class LawnGrass(Product):
             germination_period=product_data["germination_period"],
             color=product_data["color"]
         )
-
-class ProductMixin:
-    def __init__(self, *args, **kwargs):
-        print(f"{self.__class__.__name__}({', '.join(map(str, args))})")
-        super().__init__(*args, **kwargs)
-
-class Product(ProductMixin, BaseProduct):
-    pass
 
 class Category:
     category_count = 0
