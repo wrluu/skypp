@@ -297,3 +297,17 @@ def test_mixin():
         "Серый"
     )
     assert str(smartphone) == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
+
+def test_product_initialization_with_zero_quantity():
+    with pytest.raises(ValueError):
+        Product("Бракованный товар", "Неверное количество", 1000.0, 0)
+
+def test_middle_price():
+    product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+    product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
+    category = Category("Test Category", "Test Description", [product1, product2])
+    assert category.middle_price() == (180000.0 + 210000.0) / 2
+
+def test_middle_price_empty_category():
+    category = Category("Empty Category", "Test Description", [])
+    assert category.middle_price() == 0
